@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdk 32
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 33
+        minSdk 28
 
         //////////// MODIFY FOR CUSTOM APK /////////////////
         applicationId "org.openbor.engine"
@@ -78,5 +77,5 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation "androidx.car.app:app:1.2.0-rc01"
+	implementation 'androidx.car.app:app:1.2.0'
 }

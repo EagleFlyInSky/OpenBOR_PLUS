@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +35,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
+import android.system.Os;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -46,11 +48,18 @@ import androidx.core.content.ContextCompat;
 import org.libsdl.app.SDLActivity;
 import org.openbor.engine.utils.FrameDimensions;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 //msmalik681 added imports for new pak copy!
 //msmalik681 added import for permission check
@@ -70,6 +79,8 @@ public class GameActivity extends SDLActivity {
   protected static WakeLock wakeLock;
 
   private static String packageName;
+
+  private static String gamePath;
 
   public static native void fireSystemUiVisibilityChangeEvent(int isSystemBarsVisible);
 
@@ -144,7 +155,11 @@ public class GameActivity extends SDLActivity {
   }
 
   public static String jni_get_storage_path() {
-    return Environment.getExternalStorageDirectory() + "/Android/media/" + packageName;
+    if (gamePath != null) {
+      return gamePath;
+    } else {
+      return Environment.getExternalStorageDirectory() + "/Android/media/" + packageName;
+    }
   }
   // ------------------------------------------------------------------------ //
 
@@ -178,6 +193,8 @@ public class GameActivity extends SDLActivity {
     }*/
 
     packageName = getApplicationContext().getPackageName();
+
+    dynamicPath();
 
     //msmalik681 setup storage access
     CheckPermissionForMovingPaks();
@@ -233,18 +250,83 @@ public class GameActivity extends SDLActivity {
     }
   }
 
+
+  /**
+   * 动态工作路径
+   */
+  private void dynamicPath() {
+    String path = getIntent().getDataString();
+    if (path != null) {
+      File srcFile = new File(path);
+      if (srcFile.exists()) {
+        Path pakDir = Paths.get(path).getParent();
+        if (!pakDir.endsWith("Paks")) {
+          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/OpenBOR/Paks/xxx.pak", Toast.LENGTH_LONG).show();
+        }
+        Path workDir = pakDir.getParent();
+        if (!workDir.endsWith("OpenBOR")) {
+          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/OpenBOR/Paks/xxx.pak", Toast.LENGTH_LONG).show();
+        }
+        gamePath = workDir.getParent().toString();
+      }
+    }
+  }
+
+
+
+  /**
+   * 通过 intent 的 data 数据安装 pak 文件
+   */
+  private void installPakFromData() {
+
+      try {
+          String path = getIntent().getDataString();
+          if (path != null ) {
+              File srcFile = new File(path);
+              String name = srcFile.getName();
+              if (srcFile.exists()) {
+                  File outFolder = new File("/storage/emulated/0" + "/OpenBOR/Paks");
+
+                  boolean hasFile = false;
+                  String[] children = outFolder.list();
+                  if (children != null) {
+                      for (String child : children) {
+                          if (name.equals(child)){
+                            hasFile = true;
+                            continue;
+                          }
+                          new File(outFolder, child).delete();
+                      }
+                  }
+
+                  if (!hasFile){
+
+                    Path targetPath = Paths.get(path);
+                    Path link = Paths.get(outFolder.getPath(),name);
+                    // Files.createSymbolicLink(link,targetPath);
+                    // Os.symlink(targetPath.toString(),link.toString());
+                  }
+              }
+          }
+      } catch (Exception e) {
+          // empty
+        e.printStackTrace();
+      }
+
+  }
+
   //msmalik681 added permission check for API 23+ for moving .paks
   private void CheckPermissionForMovingPaks() {
     if (Build.VERSION.SDK_INT >= STORAGE_PERMISSION_CODE &&
         getApplicationContext().getPackageName().equals("org.openbor.engine"))
     {
-      if (ContextCompat.checkSelfPermission(GameActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-          ContextCompat.checkSelfPermission(GameActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+      if (ContextCompat.checkSelfPermission(GameActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+          ContextCompat.checkSelfPermission(GameActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
       {
         Toast.makeText(this, "Needed permissions not granted!", Toast.LENGTH_LONG).show();
         ActivityCompat.requestPermissions(GameActivity.this, new String[] {
-          Manifest.permission.WRITE_EXTERNAL_STORAGE,
-          Manifest.permission.READ_EXTERNAL_STORAGE
+          Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, STORAGE_PERMISSION_CODE);
       }
       else
