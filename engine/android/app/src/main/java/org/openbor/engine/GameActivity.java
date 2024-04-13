@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import android.net.Uri;
 import android.util.Log;
 import android.os.Bundle;
 import android.content.Context;
@@ -74,6 +75,8 @@ public class GameActivity extends SDLActivity {
   protected static WakeLock wakeLock;
 
   public static native void fireSystemUiVisibilityChangeEvent(int isSystemBarsVisible);
+
+  private static String gamePath;
 
   //note: White Dragon's vibrator is moved into C code for 2 reasons
   // - avoid modifying SDLActivity.java as it's platform support
@@ -144,6 +147,14 @@ public class GameActivity extends SDLActivity {
 
     return frameDimensions;
   }
+
+  public static String jni_get_storage_path() {
+    if (gamePath == null) {
+      return Environment.getExternalStorageDirectory() + "/openbor";
+    } else {
+      return gamePath;
+    }
+  }
   // ------------------------------------------------------------------------ //
 
   /**
@@ -168,6 +179,12 @@ public class GameActivity extends SDLActivity {
 
     //msmalik681 setup storage access
     CheckPermissionForMovingPaks();
+
+    Uri uri = getIntent().getData();
+    if (uri != null) {
+      String path = uri.getPath();
+
+    }
 
     //CRxTRDude - Added FLAG_KEEP_SCREEN_ON to prevent screen timeout.
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
