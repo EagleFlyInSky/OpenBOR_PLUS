@@ -78,6 +78,7 @@ public class GameActivity extends SDLActivity {
 
   public static native void fireSystemUiVisibilityChangeEvent(int isSystemBarsVisible);
 
+  private static String packageName;
   private static String gamePath;
 
   //note: White Dragon's vibrator is moved into C code for 2 reasons
@@ -152,7 +153,7 @@ public class GameActivity extends SDLActivity {
 
   public static String jni_get_storage_path() {
     if (gamePath == null) {
-      return Environment.getExternalStorageDirectory() + "/openbor";
+      return Environment.getExternalStorageDirectory() + "/Android/media/" + packageName;
     } else {
       return gamePath;
     }
@@ -178,6 +179,8 @@ public class GameActivity extends SDLActivity {
     Log.v("OpenBOR", "onCreate called");
 
     Activity activity = (Activity)getContext();
+
+    packageName = getApplicationContext().getPackageName();
 
     dynamicPath();
 

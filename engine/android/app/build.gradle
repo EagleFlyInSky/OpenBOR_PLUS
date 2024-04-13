@@ -49,7 +49,7 @@ android {
         android.applicationVariants.all { variant ->
             if (applicationId == "org.openbor30.engine") {
                 variant.outputs.all {
-                    outputFileName = "OpenBOR 3.0.apk";
+                    outputFileName = "OpenBOR3.0.apk";
                 }
             }
         }
