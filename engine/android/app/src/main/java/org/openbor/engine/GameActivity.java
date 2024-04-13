@@ -304,6 +304,9 @@ public class GameActivity extends SDLActivity {
    */
   public void CopyPak()
   {
+    if (gamePath != null) {
+      return;
+    }
     try {
       Context ctx = getContext();
       Context appCtx = getApplicationContext();
