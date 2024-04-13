@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
   compileSdkVersion 28
     defaultConfig {
-      minSdkVersion 14
-        targetSdkVersion 28
+      minSdkVersion 26
+      targetSdkVersion 28
 
         //////////// MODFY FOR CUSTOM APK /////////////////
-        applicationId "org.openbor.engine"
+        applicationId "org.openbor30.engine"
         versionCode 1
         versionName "1.0.0"
         resValue "string", "app_name", "Openbor"
@@ -42,7 +42,7 @@ android {
   buildTypes {
   
   android.applicationVariants.all { variant ->
-	if(applicationId == "org.openbor.engine"){
+	if(applicationId == "org.openbor30.engine"){
     variant.outputs.all {
         outputFileName = "OpenBOR.apk";
 			}

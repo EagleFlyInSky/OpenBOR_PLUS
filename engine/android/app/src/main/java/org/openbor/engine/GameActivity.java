@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import android.net.Uri;
 import android.util.Log;
@@ -177,14 +179,10 @@ public class GameActivity extends SDLActivity {
 
     Activity activity = (Activity)getContext();
 
+    dynamicPath();
+
     //msmalik681 setup storage access
     CheckPermissionForMovingPaks();
-
-    Uri uri = getIntent().getData();
-    if (uri != null) {
-      String path = uri.getPath();
-
-    }
 
     //CRxTRDude - Added FLAG_KEEP_SCREEN_ON to prevent screen timeout.
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -233,6 +231,23 @@ public class GameActivity extends SDLActivity {
         }
     });
 
+  }
+
+  /**
+   * 动态工作路径
+   */
+  private void dynamicPath() {
+    String path = getIntent().getDataString();
+    if (path != null) {
+      File srcFile = new File(path);
+      if (srcFile.exists()) {
+        Path pakDir = Paths.get(path).getParent();
+        if (!pakDir.endsWith("Paks")) {
+          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/Paks/xxx.pak", Toast.LENGTH_LONG).show();
+        }
+        gamePath = pakDir.getParent().toString();
+      }
+    }
   }
 
   //msmalik681 added permission check for API 23+ for moving .paks
