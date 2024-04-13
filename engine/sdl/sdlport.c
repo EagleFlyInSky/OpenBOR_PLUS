@@ -151,28 +151,16 @@ int main(int argc, char *argv[])
     char *path = (char*) malloc(MAX_FILENAME_LEN);
     jniutils_get_storage_path(path);
 
-    //if(strstr(SDL_AndroidGetExternalStoragePath(), "org.openbor.engine"))
-    if(!strcmp(SDL_AndroidGetExternalStoragePath(), "org.openbor.engine"))
-    {
-        strcpy(rootDir, "/mnt/sdcard/OpenBOR/");
-        strcpy(paksDir, "/mnt/sdcard/OpenBOR/Paks");
-        strcpy(savesDir, "/mnt/sdcard/OpenBOR/Saves");
-        strcpy(logsDir, "/mnt/sdcard/OpenBOR/Logs");
-        strcpy(screenShotsDir, "/mnt/sdcard/OpenBOR/ScreenShots");
-    }
-    else
-    {
-        strcpy(rootDir, path);
-        strcat(rootDir, "/OpenBOR/");
-        strcpy(paksDir, path);
-        strcat(paksDir, "/OpenBOR/Paks");
-        strcpy(savesDir, path);
-        strcat(savesDir, "/OpenBOR/Saves");
-        strcpy(logsDir, path);
-        strcat(logsDir, "/OpenBOR/Logs");
-        strcpy(screenShotsDir, path);
-        strcat(screenShotsDir, "/OpenBOR/ScreenShots");
-    }
+    strcpy(rootDir, path);
+    strcat(rootDir, "/");
+    strcpy(paksDir, path);
+    strcat(paksDir, "/Paks");
+    strcpy(savesDir, path);
+    strcat(savesDir, "/Saves");
+    strcpy(logsDir, path);
+    strcat(logsDir, "/Logs");
+    strcpy(screenShotsDir, path);
+    strcat(screenShotsDir, "/ScreenShots");
 
     free((char*) path);
 	dirExists(rootDir, 1);

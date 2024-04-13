@@ -261,58 +261,11 @@ public class GameActivity extends SDLActivity {
       if (srcFile.exists()) {
         Path pakDir = Paths.get(path).getParent();
         if (!pakDir.endsWith("Paks")) {
-          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/OpenBOR/Paks/xxx.pak", Toast.LENGTH_LONG).show();
+          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/Paks/xxx.pak", Toast.LENGTH_LONG).show();
         }
-        Path workDir = pakDir.getParent();
-        if (!workDir.endsWith("OpenBOR")) {
-          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/OpenBOR/Paks/xxx.pak", Toast.LENGTH_LONG).show();
-        }
-        gamePath = workDir.getParent().toString();
+        gamePath = pakDir.getParent().toString();
       }
     }
-  }
-
-
-
-  /**
-   * 通过 intent 的 data 数据安装 pak 文件
-   */
-  private void installPakFromData() {
-
-      try {
-          String path = getIntent().getDataString();
-          if (path != null ) {
-              File srcFile = new File(path);
-              String name = srcFile.getName();
-              if (srcFile.exists()) {
-                  File outFolder = new File("/storage/emulated/0" + "/OpenBOR/Paks");
-
-                  boolean hasFile = false;
-                  String[] children = outFolder.list();
-                  if (children != null) {
-                      for (String child : children) {
-                          if (name.equals(child)){
-                            hasFile = true;
-                            continue;
-                          }
-                          new File(outFolder, child).delete();
-                      }
-                  }
-
-                  if (!hasFile){
-
-                    Path targetPath = Paths.get(path);
-                    Path link = Paths.get(outFolder.getPath(),name);
-                    // Files.createSymbolicLink(link,targetPath);
-                    // Os.symlink(targetPath.toString(),link.toString());
-                  }
-              }
-          }
-      } catch (Exception e) {
-          // empty
-        e.printStackTrace();
-      }
-
   }
 
   //msmalik681 added permission check for API 23+ for moving .paks
@@ -383,6 +336,9 @@ public class GameActivity extends SDLActivity {
   @SuppressWarnings("ResultOfMethodCallIgnored")
   public void CopyPak()
   {
+    if (gamePath != null) {
+      return;
+    }
     try {
       Context ctx = getContext();
       Context appCtx = getApplicationContext();
