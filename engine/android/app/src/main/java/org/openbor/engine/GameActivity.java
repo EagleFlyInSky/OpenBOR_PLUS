@@ -349,7 +349,7 @@ public class GameActivity extends SDLActivity {
       {
         // Default output folder
         //File outFolderDefault = new File(Environment.getExternalStorageDirectory() + "/OpenBOR/Paks");
-        File outFolderDefault = new File(jni_get_storage_path() + "/OpenBOR/Paks");
+        File outFolderDefault = new File(jni_get_storage_path() + "/Paks");
 
         if (!outFolderDefault.isDirectory())
         {

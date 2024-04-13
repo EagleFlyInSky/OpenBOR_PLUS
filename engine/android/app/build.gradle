@@ -9,7 +9,7 @@ android {
         applicationId "org.openbor.engine"
         versionCode 1
         versionName "2.0.0"
-        resValue "string", "app_name", "OpenBOR"
+        resValue "string", "app_name", "OpenBOR4.0"
 		resValue "string", "app_desc", "Ultimate 2D Game Engine"
         ///////////////////////////////////////////////////
 
@@ -44,7 +44,7 @@ android {
   android.applicationVariants.all { variant ->
 	if(applicationId == "org.openbor.engine") {
       variant.outputs.all {
-          outputFileName = "OpenBOR.apk"
+          outputFileName = "OpenBOR4.0.apk"
         }
       }
 	}
