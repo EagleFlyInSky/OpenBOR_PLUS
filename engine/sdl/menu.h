@@ -11,5 +11,7 @@
 
 void Menu();
 
+void LoadGame(char *file);
+
 #endif
 

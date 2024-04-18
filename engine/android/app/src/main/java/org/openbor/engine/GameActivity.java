@@ -79,7 +79,7 @@ public class GameActivity extends SDLActivity {
   public static native void fireSystemUiVisibilityChangeEvent(int isSystemBarsVisible);
 
   private static String packageName;
-  private static String gamePath;
+  private static String gamePath = "";
 
   //note: White Dragon's vibrator is moved into C code for 2 reasons
   // - avoid modifying SDLActivity.java as it's platform support
@@ -152,12 +152,13 @@ public class GameActivity extends SDLActivity {
   }
 
   public static String jni_get_storage_path() {
-    if (gamePath == null) {
-      return Environment.getExternalStorageDirectory() + "/Android/media/" + packageName;
-    } else {
-      return gamePath;
-    }
+    return Environment.getExternalStorageDirectory() + "/Android/media/" + packageName;
   }
+
+  public static String jni_get_game_path() {
+    return gamePath;
+  }
+
   // ------------------------------------------------------------------------ //
 
   /**
@@ -240,15 +241,12 @@ public class GameActivity extends SDLActivity {
    * 动态工作路径
    */
   private void dynamicPath() {
+    gamePath = "";
     String path = getIntent().getDataString();
     if (path != null) {
       File srcFile = new File(path);
       if (srcFile.exists()) {
-        Path pakDir = Paths.get(path).getParent();
-        if (!pakDir.endsWith("Paks")) {
-          Toast.makeText(this, "独立启动游戏文件路径不正确，请确认为 xxx/Paks/xxx.pak", Toast.LENGTH_LONG).show();
-        }
-        gamePath = pakDir.getParent().toString();
+        gamePath = path;
       }
     }
   }
