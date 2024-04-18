@@ -224,7 +224,13 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef ANDROID
-    Menu();
+    char *game_path = (char*) malloc(MAX_FILENAME_LEN);
+    jniutils_get_game_path(game_path);
+    if (strlen(game_path) == 0){
+        Menu();
+    }else{
+        LoadGame(game_path);
+    }
 #elif PS3
     Menu();
 #else

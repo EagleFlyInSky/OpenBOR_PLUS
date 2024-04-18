@@ -6,7 +6,7 @@ android {
         minSdk 28
 
         //////////// MODIFY FOR CUSTOM APK /////////////////
-        applicationId "org.openbor.engine"
+        applicationId "org.openbor40.engine"
         versionCode 1
         versionName "2.0.0"
         resValue "string", "app_name", "OpenBOR4.0"
@@ -42,7 +42,7 @@ android {
   buildTypes {
   
   android.applicationVariants.all { variant ->
-	if(applicationId == "org.openbor.engine") {
+	if(applicationId == "org.openbor40.engine") {
       variant.outputs.all {
           outputFileName = "OpenBOR4.0.apk"
         }
@@ -58,7 +58,7 @@ android {
     lint {
         abortOnError false
     }
-    namespace 'org.openbor.engine'
+    namespace 'org.openbor40.engine'
 
     if (!project.hasProperty('EXCLUDE_NATIVE_LIBS')) {
     sourceSets.main {

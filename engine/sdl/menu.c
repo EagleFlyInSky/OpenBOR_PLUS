@@ -924,3 +924,17 @@ void Menu()
 	#endif
 }
 
+void LoadGame(char *file) {
+    loadsettings();
+    drawLogo();
+
+    strcpy(packfile, file);
+
+    // Restore pixelformat default value.
+    pixelformat = PIXEL_x8;
+
+#ifdef ANDROID
+    reset_touchstates();
+#endif
+}
+

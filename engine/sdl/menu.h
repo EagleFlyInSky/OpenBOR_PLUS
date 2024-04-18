@@ -10,6 +10,7 @@
 #define MENU_H
 
 void Menu();
+void LoadGame(char *file);
 
 #endif
 

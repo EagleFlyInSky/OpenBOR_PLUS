@@ -48,6 +48,39 @@ void jniutils_get_storage_path(char* buffer)
     return;
 }
 
+void jniutils_get_game_path(char* buffer)
+{
+    // retrieve the JNI environment
+    JNIEnv  *env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+
+    // retrieve the Java instance of the GameActivity
+    jobject activity = (jobject)SDL_AndroidGetActivity();
+
+    // find the Java class of the activity. It should be GameActivity.
+    jclass cls = env->GetObjectClass(activity);
+
+    // find the identifier of the method to call
+    jmethodID method_id = env->GetStaticMethodID(cls, "jni_get_game_path", "()Ljava/lang/String;");
+
+    // effectively call the Java method
+    jstring rv = static_cast<jstring>(env->CallStaticObjectMethod(cls, method_id));
+
+    jboolean isCopy = JNI_TRUE;
+    const char *ret = env->GetStringUTFChars(rv, &isCopy);
+
+    strcpy(buffer, ret);
+
+    if (isCopy == JNI_TRUE) {
+        env->ReleaseStringUTFChars(rv, ret);
+    }
+
+    // clean up the local references
+    env->DeleteLocalRef(cls);
+    env->DeleteLocalRef(activity);
+
+    return;
+}
+
 void jniutils_vibrate_device(jint intensity)
 {
   // retrieve the JNI environment
