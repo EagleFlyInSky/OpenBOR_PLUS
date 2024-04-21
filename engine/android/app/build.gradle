@@ -7,10 +7,10 @@ android {
         targetSdkVersion 28
 
         //////////// MODFY FOR CUSTOM APK /////////////////
-        applicationId "org.openbor30.engine"
+        applicationId "org.openbor413.engine"
         versionCode 1
         versionName "1.0.0"
-        resValue "string", "app_name", "OpenBOR3.0"
+        resValue "string", "app_name", "OpenBOR Plus 413"
         ///////////////////////////////////////////////////
 
         externalNativeBuild {
@@ -47,9 +47,9 @@ android {
         }
 
         android.applicationVariants.all { variant ->
-            if (applicationId == "org.openbor30.engine") {
+            if (applicationId == "org.openbor413.engine") {
                 variant.outputs.all {
-                    outputFileName = "OpenBOR3.0.apk";
+                    outputFileName = "OpenBOR_Plus_413.apk";
                 }
             }
         }
