@@ -6,10 +6,10 @@ android {
         minSdk 28
 
         //////////// MODIFY FOR CUSTOM APK /////////////////
-        applicationId "org.openbor40.engine"
+        applicationId "org.openbor526.engine"
         versionCode 1
         versionName "2.0.0"
-        resValue "string", "app_name", "OpenBOR4.0"
+        resValue "string", "app_name", "OpenBOR Plus 526"
 		resValue "string", "app_desc", "Ultimate 2D Game Engine"
         ///////////////////////////////////////////////////
 
@@ -42,9 +42,9 @@ android {
   buildTypes {
   
   android.applicationVariants.all { variant ->
-	if(applicationId == "org.openbor40.engine") {
+	if(applicationId == "org.openbor526.engine") {
       variant.outputs.all {
-          outputFileName = "OpenBOR4.0.apk"
+          outputFileName = "OpenBOR_Plus_526.apk"
         }
       }
 	}
