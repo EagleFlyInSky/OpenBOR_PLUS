@@ -4,7 +4,6 @@ android {
     compileSdkVersion 28
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 28
 
         //////////// MODFY FOR CUSTOM APK /////////////////
         applicationId "org.openbor413.engine"
@@ -15,7 +14,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                arguments "APP_PLATFORM=android-16"
+                arguments "APP_PLATFORM=android-19"
                 // currently supports with pre-built libraries for following
                 // two target abis removed arm64 as unsupported for now
                 abiFilters 'armeabi-v7a'//, 'arm64-v8a'
@@ -47,11 +46,11 @@ android {
         }
 
         android.applicationVariants.all { variant ->
-            if (applicationId == "org.openbor413.engine") {
+//            if (applicationId == "org.openbor413.engine") {
                 variant.outputs.all {
-                    outputFileName = "OpenBOR_Plus_413.apk";
+                    outputFileName = "OpenBOR_Plus_413.apk"
                 }
-            }
+            //}
         }
 
         release {
@@ -80,5 +79,5 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:support-v4:27.0.2"
+    implementation "com.android.support:support-v4:28.0.0"
 }
